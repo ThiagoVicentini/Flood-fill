@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+//#define DEBUG
 
 int** allocMatriz(int i, int j){//aloca dinamicamente uma matriz de dimensoes i,j
     int** matriz;
@@ -17,9 +18,13 @@ int** lerMatriz(FILE *file,int i, int j){
         for(int  x=0; x<i;x++){//le a linha
             fscanf(file,"%d",&value);//le cada valor
             matriz[x][y] = value;//salva em sua respectiva casa
-            printf("%d ",matriz[x][y]);
+            #ifdef DEBUG
+                printf("%d ",matriz[x][y]);
+            #endif
         }
-        printf("\n");
+        #ifdef DEBUG
+            printf("\n");
+        #endif
     }
     return matriz;//retorna matriz completa
 }
@@ -38,6 +43,9 @@ int main(){
         fscanf(file,"%d %d",&i,&j);//lê as dimensões da matriz
         matriz = lerMatriz(file,i,j);//lê a matriz
         fscanf(file,"%d %d",&posInitX,&posInitY);//lê a posição inicial do algoritimo
-        printf("%d %d",posInitX,posInitY);
+        #ifdef DEBUG
+            printf("%d %d",posInitX,posInitY);
+            printf("\n");
+        #endif
     //=========================
 }
