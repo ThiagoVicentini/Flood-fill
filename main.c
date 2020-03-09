@@ -17,43 +17,42 @@ int** lerMatriz(FILE *file,int i, int j){
     for(int x = 0; x<i;x++){//le a coluna
         for(int  y=0; y<j;y++){//le a linha
             fscanf(file,"%d",&matriz[x][y]);//le cada valor e salva na matriz
-            #ifdef DEBUG
-                printf("%d ",matriz[x][y]);
-            #endif
         }
-        #ifdef DEBUG
-            printf("\n");
-        #endif
     }
     return matriz;//retorna matriz completa
 }
 
-void floodfill(int** matriz,int i,int j,int i_inicial,int j_inicial,int busca, int substituicao){
-    matriz[i_inicial][j_inicial] = substituicao;
-    if(i_inicial-1 >= 0 && matriz[i_inicial-1][j_inicial] == busca){
-        floodfill(matriz,i,j,i_inicial-1,j_inicial,busca,substituicao);
+int floodfill(int** matriz,int i,int j,int i_inicial,int j_inicial,int busca, int substituicao){
+    int cont = 0;
+    if(matriz[i_inicial][j_inicial] == busca) {
+        matriz[i_inicial][j_inicial] = substituicao;
+        cont++;
+        if(i_inicial-1 >= 0) {
+            cont +=floodfill(matriz,i,j,i_inicial-1,j_inicial,busca,substituicao);
+        }
+        if(i_inicial-1 >= 0 && j_inicial-1 >= 0) {
+            cont +=floodfill(matriz,i,j,i_inicial-1,j_inicial-1,busca,substituicao);
+        }
+        if(j_inicial-1 >= 0){
+            cont +=floodfill(matriz,i,j,i_inicial,j_inicial-1,busca,substituicao);
+        }
+        if(i_inicial+1 < i && j_inicial-1 >= 0) {
+            cont +=floodfill(matriz,i,j,i_inicial+1,j_inicial-1,busca,substituicao);
+        }
+        if(i_inicial+1 < i){
+            cont +=floodfill(matriz,i,j,i_inicial+1,j_inicial,busca,substituicao);
+        }
+        if(i_inicial+1 < i && j_inicial+1 < j) {
+            cont +=floodfill(matriz,i,j,i_inicial+1,j_inicial+1,busca,substituicao);
+        }
+        if(j_inicial+1 < j){
+            cont +=floodfill(matriz,i,j,i_inicial,j_inicial+1,busca,substituicao);
+        }
+        if(i_inicial-1 >= 0 && j_inicial+1 < j) {
+            cont +=floodfill(matriz,i,j,i_inicial-1,j_inicial+1,busca,substituicao);
+        }
     }
-    if(i_inicial-1 >= 0 && j_inicial-1 >= 0 && matriz[i_inicial-1][j_inicial-1] == busca) {
-        floodfill(matriz,i,j,i_inicial-1,j_inicial-1,busca,substituicao);
-    }
-    if(j_inicial-1 >= 0 && matriz[i_inicial][j_inicial-1] == busca){
-        floodfill(matriz,i,j,i_inicial,j_inicial-1,busca,substituicao);
-    }
-    if(i_inicial+1 < i && j_inicial-1 >= 0 && matriz[i_inicial+1][j_inicial-1] == busca) {
-        floodfill(matriz,i,j,i_inicial+1,j_inicial-1,busca,substituicao);
-    }
-    if(i_inicial+1 < i && matriz[i_inicial+1][j_inicial] == busca){
-        floodfill(matriz,i,j,i_inicial+1,j_inicial,busca,substituicao);
-    }
-    if(i_inicial+1 < i && j_inicial+1 < j && matriz[i_inicial+1][j_inicial+1] == busca) {
-        floodfill(matriz,i,j,i_inicial+1,j_inicial+1,busca,substituicao);
-    }
-    if(j_inicial+1 < j && matriz[i_inicial][j_inicial+1] == busca){
-        floodfill(matriz,i,j,i_inicial,j_inicial+1,busca,substituicao);
-    }
-    if(i_inicial-1 >= 0 && j_inicial+1 < j && matriz[i_inicial-1][j_inicial+1] == busca) {
-        floodfill(matriz,i,j,i_inicial-1,j_inicial+1,busca,substituicao);
-    }
+    return cont;
 }
 
 void freeMatriz(int **matriz, int i){//percorre todos os espaços alocados liberando-os
@@ -77,8 +76,9 @@ int main(){
         fscanf(file,"%d %d",&i,&j);//lê as dimensões da matriz
         matriz = lerMatriz(file,i,j);//lê a matriz
         fscanf(file,"%d %d",&posInitI,&posInitJ);//lê a posição inicial do algoritimo
-        floodfill(matriz,i,j,posInitI,posInitJ,1,2);
+        int cont = floodfill(matriz,i,j,posInitI,posInitJ,matriz[posInitI][posInitJ],2);
         #ifdef DEBUG
+            printf("%d\n",cont);
             for(int x = 0; x<i; x++){
                 for(int y = 0; y<j; y++){
                     printf("%d ",matriz[x][y]);
