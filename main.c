@@ -5,8 +5,8 @@
 int** allocMatriz(int i, int j){//aloca dinamicamente uma matriz de dimensoes i,j
     int** matriz;
     matriz = (int**)malloc (i * sizeof(int *));
-    for (int m = 0; m < i; m++){
-        matriz[m] = (int*)malloc (j * sizeof (int));
+    for (int x = 0; x < i; x++){
+        matriz[x] = (int*)malloc (j * sizeof (int));
     }
     return matriz;
 }
@@ -56,6 +56,13 @@ void floodfill(int** matriz,int i,int j,int i_inicial,int j_inicial,int busca, i
     }
 }
 
+void freeMatriz(int **matriz, int i){//percorre todos os espaços alocados liberando-os
+  for(int x = 0; x < i; x++){
+    free(matriz[x]);
+  }
+  free(matriz);
+}
+
 int main(){
     //Declaraçao de variáveis
         char arquivo[100];//vetor que armazena o nome do arquivo
@@ -70,10 +77,6 @@ int main(){
         fscanf(file,"%d %d",&i,&j);//lê as dimensões da matriz
         matriz = lerMatriz(file,i,j);//lê a matriz
         fscanf(file,"%d %d",&posInitI,&posInitJ);//lê a posição inicial do algoritimo
-        #ifdef DEBUG
-            printf("%d %d",posInitI,posInitJ);
-            printf("\n");
-        #endif
         floodfill(matriz,i,j,posInitI,posInitJ,1,2);
         #ifdef DEBUG
             for(int x = 0; x<i; x++){
@@ -83,5 +86,9 @@ int main(){
                 printf("\n");
             }
         #endif
+    //=========================
+    //Finalização
+        fclose(file);
+        freeMatriz(matriz,i);
     //=========================
 }
