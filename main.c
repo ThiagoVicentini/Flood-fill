@@ -77,8 +77,8 @@ int main(){
         matriz = lerMatriz(file,i,j);//lê a matriz
         fscanf(file,"%d %d",&posInitI,&posInitJ);//lê a posição inicial do algoritimo
         int cont = floodfill(matriz,i,j,posInitI,posInitJ,matriz[posInitI][posInitJ],2);
+        printf("Total: %d\n",cont);
         #ifdef DEBUG
-            printf("%d\n",cont);
             for(int x = 0; x<i; x++){
                 for(int y = 0; y<j; y++){
                     printf("%d ",matriz[x][y]);
