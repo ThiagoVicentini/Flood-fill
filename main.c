@@ -14,8 +14,8 @@ int** allocMatriz(int i, int j){//aloca dinamicamente uma matriz de dimensoes i,
 int** lerMatriz(FILE *file,int i, int j){
     int** matriz = allocMatriz(i,j);//recebe a matriz
     int value;
-    for(int x = 0; x<i;x++){//le a coluna
-        for(int  y=0; y<j;y++){//le a linha
+    for(int x = 0; x<i;x++){//le a linha
+        for(int  y=0; y<j;y++){//le a coluna
             fscanf(file,"%d",&matriz[x][y]);//le cada valor e salva na matriz
         }
     }
